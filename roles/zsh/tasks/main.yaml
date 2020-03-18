@@ -1,0 +1,87 @@
+- name: install zsh
+  apt:
+    name: zsh
+  become: yes
+
+- name: check if oh-my-zsh is installed
+  stat:
+    path: ~/.oh-my-zsh
+  register: ohmyzsh_details
+
+- name: install oh-my-zsh
+  shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  when: not ohmyzsh_details.stat.exists
+
+- name: check if oh-my-zsh is installed (root)
+  stat:
+    path: /root/.oh-my-zsh
+  register: ohmyzsh_details_root
+  become: yes
+
+- name: install oh-my-zsh (root)
+  shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  when: not  ohmyzsh_details_root.stat.exists
+  become: yes
+
+- name: download fzf
+  git:
+    repo: https://github.com/junegunn/fzf
+    dest: ~/.fzf
+
+- name: install fzf
+  shell: "~/.fzf/install --key-bindings --completion --no-update-rc --no-bash --no-zsh --no-fish --no-bash"
+
+- name: add zsh configurations
+  template:
+    src: zshrc
+    dest: ~/.zshrc
+
+- name: add zsh configurations (root)
+  template:
+    src: zshrc
+    dest: "/root/.zshrc"
+  become: yes
+
+- name: copy zsh theme
+  template:
+    src: mine.zsh-theme
+    dest: ~/.oh-my-zsh/custom/themes/mine.zsh-theme
+
+- name: copy zsh theme (root)
+  template:
+    src: mine.zsh-theme
+    dest: "/root/.oh-my-zsh/custom/themes/mine.zsh-theme"
+  become: yes
+
+- name: install additional zsh plugins
+  git:
+    repo: "{{ item.url }}"
+    dest: "~/.oh-my-zsh/custom/plugins/{{ item.name }}"
+  with_items:
+    - { "name": "zsh-autosuggestions", "url": "https://github.com/zsh-users/zsh-autosuggestions" }
+    - { "name": "zsh-history-substring-search", "url": "https://github.com/zsh-users/zsh-history-substring-search" }
+    - { "name": "zsh-syntax-highlighting", "url": "https://github.com/zsh-users/zsh-syntax-highlighting" }
+
+- name: install additional zsh plugins (root)
+  shell: "cp -r /home/{{ ansible_user }}/.oh-my-zsh/custom/plugins/* /root/.oh-my-zsh/custom/plugins"
+  become: true
+
+- name: create the whereami file
+  file:
+    path: /var/whereami
+    state: touch
+    mode: '0666'
+  become: yes
+
+- name: change shell to zsh
+  user:
+    name: "{{ ansible_user }}"
+    shell: /usr/bin/zsh
+  become: yes
+
+- name: change shell to zsh (root)
+  user:
+    name: root
+    shell: /usr/bin/zsh
+  become: yes
+

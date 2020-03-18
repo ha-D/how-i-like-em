@@ -1,0 +1,43 @@
+alias dc=docker-compose
+alias apti="sudo apt install"
+alias apts="sudo apt-cache search"
+alias aria="aria2c -k 1M -s 10 -x 10"
+alias mso=microstack.openstack
+alias msl=microstack.launch
+alias volup="amixer -D pulse sset Master 5%+"
+alias voldown="amixer -D pulse sset Master 5%-"
+alias vim="nvim"
+
+export GOROOT=/usr/local/go
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOPATH/bin:$GOROOT/bin:/snap/bin
+
+alias kctl=kubectl
+alias godel="cd /home/{{ ansible_user }}/go/src/git.cafebazaar.ir/infrastructure/godel"
+alias feynman="cd /home/{{ ansible_user }}/go/src/git.cafebazaar.ir/infrastructure/feynman"
+alias cluster="k config use-context"
+export PATH=$PATH:/opt/cni/bin
+
+cd $(cat /var/whereami)
+saveloc() {
+  pwd > /var/whereami
+}
+precmd_functions=(saveloc)
+
+export ZSH="$HOME/.oh-my-zsh"
+export FZF_BASE="/home/{{ ansible_user }}/.fzf"
+
+ZSH_THEME="mine"
+
+plugins=(git zsh-autosuggestions zsh-history-substring-search zsh-syntax-highlighting kubectl fzf)
+
+source $ZSH/oh-my-zsh.sh
+
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='vim'
+else
+  export EDITOR='nvim'
+fi
+
+fpath=(~/.zsh-functions/ $fpath)
+autoload -U compinit && compinit

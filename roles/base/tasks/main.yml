@@ -1,0 +1,17 @@
+- name: update and upgrade apt packages
+  environment:
+    http_proxy: "{{ http_proxy }}"
+    https_proxy: "{{ http_proxy }}"
+  apt:
+    update_cache: yes
+  become: yes
+
+- name: install packages
+  apt: "{{item}}"
+  loop:
+    - wget
+    - curl
+    - aria2
+    - build-essential
+  become: yes
+

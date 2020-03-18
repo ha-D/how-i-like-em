@@ -1,0 +1,45 @@
+- name: add apt repo for python
+  environment:
+    http_proxy: "{{ http_proxy }}"
+    https_proxy: "{{ http_proxy }}"
+  apt_repository:
+    repo: "ppa:deadsnakes/ppa"
+    state: present
+  become: yes
+
+- name: install python
+  apt:
+    name: "{{ item }}"
+  loop:
+    - "python{{ python_version }}"
+    - "python3-distutils"
+  become: yes
+
+- name: download python pip installer
+  get_url:
+    url: https://bootstrap.pypa.io/get-pip.py
+    dest: /tmp/get-pip.py
+  become: yes
+
+- name: install python pip
+  shell: "python{{ python_version }} /tmp/get-pip.py"
+  become: yes
+
+- name: create python sym links
+  file:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    state: link
+    force: yes
+  become: yes
+  with_items:
+    - { "src": "/usr/bin/python{{ python_version }}", "dest": "/usr/bin/python" }
+    - { "src": "/usr/bin/pip{{ python_version }}", "dest": "/usr/bin/pip" }
+
+- name: install python packages
+  pip:
+    name: "{{ item }}"
+  become: yes
+  loop:
+    - ipython
+

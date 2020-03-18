@@ -1,0 +1,10 @@
+[Unit]
+Description=Shadowsocks Server
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/ss-server -m chacha20-ietf-poly1305  -p {{shadowsocks_port}} -k {{shadowsocks_password}} -l 1080 -s {{shadowsocks_server}}
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target

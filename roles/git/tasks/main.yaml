@@ -1,0 +1,27 @@
+- name: add apt repository for lazygit
+  environment:
+    http_proxy: "{{ http_proxy }}"
+    https_proxy: "{{ http_proxy }}"
+  apt_repository:
+    repo: "ppa:lazygit-team/release"
+    state: present
+  become: yes
+
+- name: install git packages
+  apt:
+    name: "{{ item }}"
+  loop:
+    - git
+    - lazygit
+  become: yes
+
+- name: configuring git
+  git_config:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    scope: global
+  with_items:
+    - { name: 'user.name', value: "{{ git_user }}" }
+    - { name: 'user.email', value: "{{ git_email }}" }
+    - { name: 'core.editor', value: "vim" }
+

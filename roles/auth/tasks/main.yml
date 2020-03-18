@@ -1,0 +1,19 @@
+
+- name: add ssh authorized keys
+  authorized_key:
+    user: "{{ ansible_user }}"
+    state: present
+    key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+- name: add ssh authorized keys (root)
+  authorized_key:
+    user: root
+    state: present
+    key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+  become: yes
+
+- name: configure sudoers
+  template:
+    src: sudoers
+    dest: /etc/sudoers
+  become: yes

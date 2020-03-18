@@ -1,0 +1,6 @@
+shadowsocks_password
+
+*.retry
+*.log
+.DS_Store
+

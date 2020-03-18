@@ -1,0 +1,97 @@
+- name: add neovim repository
+  environment:
+    http_proxy: "{{ http_proxy }}"
+    https_proxy: "{{ http_proxy }}"
+  apt_repository:
+    repo: ppa:neovim-ppa/unstable
+    state: present
+  become: yes
+
+- name: install neovim
+  apt:
+    name: neovim
+  become: yes
+
+- name: install universal ctags
+  shell: snap install universal-ctags
+  become: yes
+
+- name: add vim configuration file
+  template: 
+    src: vimrc
+    dest: ~/.vimrc
+
+- name: add vim configuration file (root)
+  template: 
+    src: vimrc
+    dest: /root/.vimrc
+  become: yes
+
+- name: create vim directories
+  file:
+    path: ~/{{ item }}
+    state: directory
+  loop:
+    - .vim/ftplugin
+    - .vim/autoload
+    - .config/nvim
+
+- name: create vim directory (root)
+  file:
+    path: "/root/.vim/ftplugin"
+    state: directory
+  become: yes
+
+- name: add vim language configuration files
+  template:
+    src: "{{ item }}"
+    dest: ~/.vim/ftplugin/{{ item | basename }}
+  with_fileglob:
+    - ../templates/ftplugin/*
+
+- name: install vim-plug
+  get_url:
+    url: https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    dest: ~/.vim/autoload/plug.vim
+
+- name: check if coc plugin already exists
+  stat:
+    path: ~/.vim/bundle/coc.nvim
+  register: coc_details
+
+- name: install coc dependencies
+  npm:
+    path: ~/.vim/bundle/coc.nvim
+  when: coc_details.stat.exists
+
+- name: install vim plugins
+  shell: "vim +PlugInstall +qall"
+
+- name: create neovim config
+  template:
+    src: "init.vim"
+    dest: ~/.config/nvim/init.vim
+
+- name: configure vimrc (root)
+  copy:
+    src: ~/.vimrc
+    dest: /root/.vimrc
+    remote_src: yes
+  become: yes
+
+- name: create vim directories (root)
+  file:
+    path: "/root/{{ item }}"
+    state: directory
+  loop:
+    - .config
+  become: yes
+
+- name: configure vim (root)
+  shell: "cp -r /home/{{ ansible_user }}/.vim /root/.vim"
+  become: yes
+
+- name: configure neovim (root)
+  shell: "cp -r /home/{{ ansible_user }}/.config/nvim /root/.config/nvim"
+  become: yes
+

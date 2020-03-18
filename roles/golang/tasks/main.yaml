@@ -1,0 +1,16 @@
+- name: download golang
+  environment:
+    http_proxy: "{{ http_proxy }}"
+    https_proxy: "{{ http_proxy }}"
+  get_url:
+    url: "https://dl.google.com/go/go{{ go_version }}.linux-amd64.tar.gz"
+    dest: /tmp/go.tar.gz
+  become: yes
+
+- name: install golang
+  unarchive:
+    src: /tmp/go.tar.gz
+    dest: /usr/local/
+    remote_src: yes
+  become: yes
+

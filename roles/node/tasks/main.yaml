@@ -1,0 +1,20 @@
+- name: add repo for nodejs 
+  environment:
+    http_proxy: "{{ http_proxy }}"
+    https_proxy: "{{ http_proxy }}"
+  shell: "curl -sL https://deb.nodesource.com/setup_{{ node_version }}.x | sudo -E bash -"
+  become: yes
+
+- name: install nodejs
+  apt:
+    name: nodejs
+  become: yes
+
+- name: install nodejs packages
+  npm:
+    name: "{{ item }}"
+    global: yes
+  become: yes
+  loop:
+    - http-server
+    - yarn

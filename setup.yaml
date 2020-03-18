@@ -1,0 +1,18 @@
+- hosts: all
+  vars:
+    ansible_user: ubuntu
+    ansible_ssh_pipelining: yes
+    ansible_python_interpreter: /usr/bin/python3
+  roles:
+    - auth
+    - base 
+    - docker
+    - git 
+    - python
+    - node
+    - golang
+    - neovim
+    - zsh
+    - shadowsocks-server
+    - shadowsocks-client
+
