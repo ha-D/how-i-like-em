@@ -135,7 +135,5 @@ nnoremap <C-F>o :CtrlSFOpen<CR>
 nnoremap <C-F>t :CtrlSFToggle<CR>
 inoremap <C-F>t <Esc>:CtrlSFToggle<CR>
 
-" For Osx https://github.com/neovim/neovim/issues/3702
-set mouse=
-
+set mouse=a
 set belloff=all
