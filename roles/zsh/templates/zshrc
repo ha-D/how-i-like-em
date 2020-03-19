@@ -39,5 +39,8 @@ else
   export EDITOR='nvim'
 fi
 
+# https://github.com/zsh-users/zsh-autosuggestions/issues/229
+if [ ! "$TMUX" = "" ]; then export TERM=xterm-256color; fi
+
 fpath=(~/.zsh-functions/ $fpath)
 autoload -U compinit && compinit
