@@ -138,3 +138,4 @@ inoremap <C-F>t <Esc>:CtrlSFToggle<CR>
 " For Osx https://github.com/neovim/neovim/issues/3702
 set mouse=
 
+set belloff=all
