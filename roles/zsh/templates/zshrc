@@ -8,6 +8,8 @@ alias volup="amixer -D pulse sset Master 5%+"
 alias voldown="amixer -D pulse sset Master 5%-"
 alias vim="nvim"
 
+export PATH=$PATH:~/.local/bin
+
 export GOROOT=/usr/local/go
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin:$GOROOT/bin:/snap/bin
