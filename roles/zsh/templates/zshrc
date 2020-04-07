@@ -8,6 +8,8 @@ alias volup="amixer -D pulse sset Master 5%+"
 alias voldown="amixer -D pulse sset Master 5%-"
 alias vim="nvim"
 
+export TERM=xterm-256color
+
 export PATH=$PATH:~/.local/bin
 
 export GOROOT=/usr/local/go
