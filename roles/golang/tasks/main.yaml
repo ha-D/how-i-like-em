@@ -1,16 +1,18 @@
-- name: download golang
+- name: Add apt repo for go
   environment:
     http_proxy: "{{ http_proxy }}"
     https_proxy: "{{ http_proxy }}"
-  get_url:
-    url: "https://dl.google.com/go/go{{ go_version }}.linux-amd64.tar.gz"
-    dest: /tmp/go.tar.gz
-  become: yes
+  apt_repository:
+    repo: ppa:longsleep/golang-backports
+    state: present
+    filename: google-chrome
+  become: true
 
-- name: install golang
-  unarchive:
-    src: /tmp/go.tar.gz
-    dest: /usr/local/
-    remote_src: yes
-  become: yes
-
+- name: apt golang-go
+  environment:
+    http_proxy: "{{ http_proxy }}"
+    https_proxy: "{{ http_proxy }}"
+  apt:
+    name: golang-go
+    state: present
+  become: true

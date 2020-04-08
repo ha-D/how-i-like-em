@@ -6,19 +6,18 @@ alias mso=microstack.openstack
 alias msl=microstack.launch
 alias volup="amixer -D pulse sset Master 5%+"
 alias voldown="amixer -D pulse sset Master 5%-"
-alias vim="nvim"
 
 export TERM=xterm-256color
 
 export PATH=$PATH:~/.local/bin
 
-export GOROOT=/usr/local/go
+export GOROOT=/usr/lib/go-1.14
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin:$GOROOT/bin:/snap/bin
 
 alias kctl=kubectl
-alias godel="cd /home/{{ ansible_user }}/go/src/git.cafebazaar.ir/infrastructure/godel"
-alias feynman="cd /home/{{ ansible_user }}/go/src/git.cafebazaar.ir/infrastructure/feynman"
+alias godel="cd /home/hadi/go/src/git.cafebazaar.ir/infrastructure/godel"
+alias feynman="cd /home/hadi/go/src/git.cafebazaar.ir/infrastructure/feynman"
 alias cluster="k config use-context"
 export PATH=$PATH:/opt/cni/bin
 
@@ -29,9 +28,9 @@ saveloc() {
 precmd_functions=(saveloc)
 
 export ZSH="$HOME/.oh-my-zsh"
-export FZF_BASE="/home/{{ ansible_user }}/.fzf"
+export FZF_BASE=/home/hadi/.fzf
 
-ZSH_THEME="mine"
+ZSH_THEME="robbyrussell"
 
 plugins=(git zsh-autosuggestions zsh-history-substring-search zsh-syntax-highlighting kubectl fzf)
 
@@ -48,3 +47,4 @@ if [ ! "$TMUX" = "" ]; then export TERM=xterm-256color; fi
 
 fpath=(~/.zsh-functions/ $fpath)
 autoload -U compinit && compinit
+
