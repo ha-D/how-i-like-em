@@ -1,0 +1,18 @@
+- name: add neovim repository
+  environment:
+    http_proxy: "{{ http_proxy }}"
+    https_proxy: "{{ http_proxy }}"
+  apt_repository:
+    repo: ppa:neovim-ppa/unstable
+    state: present
+  become: yes
+
+- name: install neovim
+  apt:
+    name: neovim
+  become: yes
+
+- name: install universal ctags
+  shell: snap install universal-ctags
+  become: yes
+

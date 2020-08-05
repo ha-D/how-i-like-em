@@ -2,23 +2,65 @@ call plug#begin()
 
 Plug 'scrooloose/nerdtree'
 Plug 'fatih/vim-go'
+Plug 'sebdah/vim-delve'
 Plug 'vim-airline/vim-airline'
 Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-surround'
 Plug 'kien/ctrlp.vim'
 Plug 'majutsushi/tagbar'
 Plug 'dyng/ctrlsf.vim'
 Plug 'tpope/vim-commentary'
 Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
+Plug 'APZelos/blamer.nvim'
+Plug 'psliwka/vim-smoothie'
+Plug 'sheerun/vim-polyglot'
+Plug 'scrooloose/syntastic'
+Plug 'puremourning/vimspector'
 
 Plug 'joshdick/onedark.vim'
+Plug 'morhetz/gruvbox'
+" Should be last
+Plug 'ryanoasis/vim-devicons'
 call plug#end()
 
+" -------------------------------------------------------------------------------------------------
+" Basics
+" -------------------------------------------------------------------------------------------------
+let mapleader = ";"
+
+set mouse=a
+set belloff=all
+set encoding=utf8
+
+set autoindent
+set smartindent
+set shiftwidth=4
+set smarttab
+set clipboard=unnamed
+
+set number
+set relativenumber
+
+set incsearch
+set ignorecase
+set smartcase
+
+set noswapfile
+set autoread
+autocmd BufWritePre * %s/\s\+$//e "Auto remove trailing whitespace
+
+set formatoptions-=cro " dont add comment on newline
 
 " -------------------------------------------------------------------------------------------------
-" coc.nvim default settings
+" Hotkeys
 " -------------------------------------------------------------------------------------------------
+:nmap <leader>s :split<Cr>
+:nmap <leader>v :vsplit<Cr>
 
+" -------------------------------------------------------------------------------------------------
+" Coc
+" -------------------------------------------------------------------------------------------------
 " if hidden is not set, TextEdit might fail.
 set hidden
 " Better display for messages
@@ -86,6 +128,18 @@ nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 " this is handled by LanguageClient [LC]
 let g:go_def_mapping_enabled = 0
 
+let g:coc_global_extensions = [
+	\ 'coc-pairs',
+	\ 'coc-python',
+	\ 'coc-json',
+	\ 'coc-html',
+	\ 'coc-css',
+	\ 'coc-prettier'
+	\]
+
+" -------------------------------------------------------------------------------------------------
+" Status stuff
+" -------------------------------------------------------------------------------------------------
 " enable tagbar for go
 let g:tagbar_type_go = {
     \ 'ctagstype': 'go',
@@ -98,6 +152,12 @@ let g:tagbar_type_go = {
     \]
 \}
 
+" Fixes some error with airline and tagbar
+let g:airline#extensions#tagbar#enabled = 0
+
+" -------------------------------------------------------------------------------------------------
+" Theme
+" -------------------------------------------------------------------------------------------------
 " OneDark Theme
 if (has("nvim"))
    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
@@ -106,14 +166,17 @@ if (has("termguicolors"))
    set termguicolors
 endif
 syntax on
-silent! colorscheme onedark
-let g:airline_theme='onedark'
+silent! colorscheme gruvbox
+let g:airline_theme='gruvbox'
+set bg:dark
 
-set number
-set ts=4
-set shiftwidth=4
+"silent! colorscheme onedark
+"let g:airline_theme='onedark'
 
+
+" -------------------------------------------------------------------------------------------------
 " NERDTree
+" -------------------------------------------------------------------------------------------------
 nnoremap <silent> <expr> <C-g> g:NERDTree.IsOpen() ? "\:NERDTreeClose<CR>" : bufexists(expand('%')) ? "\:NERDTreeFind<CR>" : "\:NERDTree<CR>"
 :nnoremap <C-2> 2gt
 let NERDTreeMinimalUI = 1
@@ -122,18 +185,21 @@ let NERDTreeDirArrows = 1
 nnoremap <silent> <C-l> :TagbarToggle <CR>
 
 
-" Fixes some error with airline and tagbar
-let g:airline#extensions#tagbar#enabled = 0
+" -------------------------------------------------------------------------------------------------
+" Search
+" -------------------------------------------------------------------------------------------------
+nmap     <leader>f <Plug>CtrlSFPrompt
+vmap     <leader>f <Plug>CtrlSFVwordPath
+vmap     <leader>F <Plug>CtrlSFVwordExec
+nmap     <leader>n <Plug>CtrlSFCwordPath
+nmap     <leader>p <Plug>CtrlSFPwordPath
+nnoremap <leader>o :CtrlSFOpen<CR>
+nnoremap <leader>t :CtrlSFToggle<CR>
+inoremap <leader>t <Esc>:CtrlSFToggle<CR>
 
-" Searching
-nmap     <C-F>f <Plug>CtrlSFPrompt
-vmap     <C-F>f <Plug>CtrlSFVwordPath
-vmap     <C-F>F <Plug>CtrlSFVwordExec
-nmap     <C-F>n <Plug>CtrlSFCwordPath
-nmap     <C-F>p <Plug>CtrlSFPwordPath
-nnoremap <C-F>o :CtrlSFOpen<CR>
-nnoremap <C-F>t :CtrlSFToggle<CR>
-inoremap <C-F>t <Esc>:CtrlSFToggle<CR>
 
-set mouse=a
-set belloff=all
+" -------------------------------------------------------------------------------------------------
+" VimSpector
+" -------------------------------------------------------------------------------------------------
+let g:vimspector_enable_mappings = "HUMAN"
+
