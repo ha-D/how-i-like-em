@@ -5,6 +5,7 @@ Plug 'fatih/vim-go'
 Plug 'sebdah/vim-delve'
 Plug 'vim-airline/vim-airline'
 Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-surround'
 Plug 'kien/ctrlp.vim'
 Plug 'majutsushi/tagbar'
@@ -13,8 +14,12 @@ Plug 'tpope/vim-commentary'
 Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
 Plug 'APZelos/blamer.nvim'
 Plug 'psliwka/vim-smoothie'
+Plug 'sheerun/vim-polyglot'
+Plug 'scrooloose/syntastic'
+Plug 'puremourning/vimspector'
 
 Plug 'joshdick/onedark.vim'
+Plug 'morhetz/gruvbox'
 " Should be last
 Plug 'ryanoasis/vim-devicons'
 call plug#end()
@@ -26,9 +31,26 @@ let mapleader = ";"
 
 set mouse=a
 set belloff=all
-set number
-set ts=4
+set encoding=utf8
+
+set autoindent
+set smartindent
 set shiftwidth=4
+set smarttab
+set clipboard=unnamed
+
+set number
+set relativenumber
+
+set incsearch
+set ignorecase
+set smartcase
+
+set noswapfile
+set autoread
+autocmd BufWritePre * %s/\s\+$//e "Auto remove trailing whitespace
+
+set formatoptions-=cro " dont add comment on newline
 
 " -------------------------------------------------------------------------------------------------
 " Hotkeys
@@ -144,8 +166,12 @@ if (has("termguicolors"))
    set termguicolors
 endif
 syntax on
-silent! colorscheme onedark
-let g:airline_theme='onedark'
+silent! colorscheme gruvbox
+let g:airline_theme='gruvbox'
+set bg:dark
+
+"silent! colorscheme onedark
+"let g:airline_theme='onedark'
 
 
 " -------------------------------------------------------------------------------------------------
@@ -162,14 +188,18 @@ nnoremap <silent> <C-l> :TagbarToggle <CR>
 " -------------------------------------------------------------------------------------------------
 " Search
 " -------------------------------------------------------------------------------------------------
-nmap     <C-F>f <Plug>CtrlSFPrompt
-vmap     <C-F>f <Plug>CtrlSFVwordPath
-vmap     <C-F>F <Plug>CtrlSFVwordExec
-nmap     <C-F>n <Plug>CtrlSFCwordPath
-nmap     <C-F>p <Plug>CtrlSFPwordPath
-nnoremap <C-F>o :CtrlSFOpen<CR>
-nnoremap <C-F>t :CtrlSFToggle<CR>
-inoremap <C-F>t <Esc>:CtrlSFToggle<CR>
+nmap     <leader>f <Plug>CtrlSFPrompt
+vmap     <leader>f <Plug>CtrlSFVwordPath
+vmap     <leader>F <Plug>CtrlSFVwordExec
+nmap     <leader>n <Plug>CtrlSFCwordPath
+nmap     <leader>p <Plug>CtrlSFPwordPath
+nnoremap <leader>o :CtrlSFOpen<CR>
+nnoremap <leader>t :CtrlSFToggle<CR>
+inoremap <leader>t <Esc>:CtrlSFToggle<CR>
 
 
+" -------------------------------------------------------------------------------------------------
+" VimSpector
+" -------------------------------------------------------------------------------------------------
+let g:vimspector_enable_mappings = "HUMAN"
 
