@@ -1,6 +1,9 @@
 shadowsocks_password
+setup.rendered.yaml
 
 *.retry
 *.log
+*.swp
+*.swo
 .DS_Store
 

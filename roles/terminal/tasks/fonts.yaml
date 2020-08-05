@@ -1,0 +1,14 @@
+- name: create .fonts directory
+  file:
+    path: ~/.fonts
+    state: directory
+    mode: '0755'
+
+- name: download nerd font
+  unarchive:
+    src: https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/CodeNewRoman.zip
+    dest: ~/.fonts
+    remote_src: yes
+
+- name: update font cache
+  shell: fc-cache -fv

@@ -1,0 +1,10 @@
+- name: install terminator
+  apt:
+    name: terminator
+  become: yes
+
+ 
+- name: terminator config
+  template:
+    src: config
+    dest: ~/.config/terminator/config
