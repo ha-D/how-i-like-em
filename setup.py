@@ -34,5 +34,5 @@ command = 'ansible-playbook -i {}, setup.rendered.yaml'.format(answers['host'])
 print(command)
 process = subprocess.Popen(command.split(' '), stdout=subprocess.PIPE)
 for c in iter(lambda: process.stdout.read(1), ''):
-    sys.stdout.write(c)
+    sys.stdout.write(c.decode('utf-8'))
 
