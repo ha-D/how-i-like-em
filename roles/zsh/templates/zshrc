@@ -2,39 +2,60 @@ alias dc=docker-compose
 alias apti="sudo apt install"
 alias apts="sudo apt-cache search"
 alias aria="aria2c -k 1M -s 10 -x 10"
-alias mso=microstack.openstack
-alias msl=microstack.launch
-alias volup="amixer -D pulse sset Master 5%+"
-alias voldown="amixer -D pulse sset Master 5%-"
+alias of="sudo ovs-ofctl"
+alias vs="sudo ovs-vsctl"
+alias ta="tmux attach -t"
+alias tl="tmux ls"
+alias vim="nvim"
+alias k9s="k9s --readonly"
+alias k9sw="/usr/bin/k9s"
 
-export TERM=xterm-256color
-
-export PATH=$PATH:~/.local/bin
-
-export GOROOT=/usr/lib/go-1.14
+export PATH=$PATH:~/.local/bin:~/.scripts:~/Dev/cluster/bin:/snap/bin
+export GOROOT=/usr/local/go
 export GOPATH=$HOME/go
-export PATH=$PATH:$GOPATH/bin:$GOROOT/bin:/snap/bin
+export PATH=$PATH:$GOPATH/bin:$GOROOT/bin:/snap/bin:$HOME/.cargo/bin
 
 alias kctl=kubectl
 alias godel="cd /home/hadi/go/src/git.cafebazaar.ir/infrastructure/godel"
 alias feynman="cd /home/hadi/go/src/git.cafebazaar.ir/infrastructure/feynman"
-alias cluster="k config use-context"
 export PATH=$PATH:/opt/cni/bin
-
-cd $(cat /var/whereami)
-saveloc() {
-  pwd > /var/whereami
-}
-precmd_functions=(saveloc)
 
 export ZSH="$HOME/.oh-my-zsh"
 export FZF_BASE=/home/hadi/.fzf
 
+if [ $TERM = "dumb" ]; then
+    unsetopt zle && PS1='$ '
+    return
+else
+    export TERM=xterm-256color
+fi
+
+
 ZSH_THEME="robbyrussell"
 
-plugins=(git zsh-autosuggestions zsh-history-substring-search zsh-syntax-highlighting kubectl fzf)
+plugins=(git zsh-autosuggestions zsh-history-substring-search zsh-syntax-highlighting kubectl fzf kube-ps1)
 
 source $ZSH/oh-my-zsh.sh
+
+KUBECONFIG=~/.kube/config
+cluster() {
+	dangerous=(mobin afra)
+	if [[ ${dangerous[(ie)$1]} -le ${#dangerous} ]]; then
+		KUBE_PS1_COLOR_CONTEXT="%{$fg_bold[red]%}"
+	elif [[ "$1" == "local" ]]; then
+		KUBE_PS1_COLOR_CONTEXT="%{$fg[cyan]%}"
+	else
+		KUBE_PS1_COLOR_CONTEXT="%{$fg[yellow]%}"
+	fi
+	export KUBECONFIG=~/.kube/$1
+}
+KUBE_PS1_NS_ENABLE=false
+KUBE_PS1_SYMBOL_ENABLE=false
+KUBE_PS1_DIVIDER=""
+KUBE_PS1_COLOR_CONTEXT="%{$fg[cyan]%}"
+#export PROMPT="$(kube_ps1) %{$fg[green]%}$(hostname) $PROMPT"
+export PROMPT='$(kube_ps1)'' '%{$fg[green]%}$(hostname)' '$PROMPT
+
 
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
@@ -46,5 +67,9 @@ fi
 if [ ! "$TMUX" = "" ]; then export TERM=xterm-256color; fi
 
 fpath=(~/.zsh-functions/ $fpath)
-autoload -U compinit && compinit
+
+autoload -U +X compinit && compinit
+autoload -U +X bashcompinit && bashcompinit
+
+source <(kubectl completion zsh)
 
