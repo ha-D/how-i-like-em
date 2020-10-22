@@ -1,0 +1,48 @@
+- name: install tmux
+  apt:
+    name: tmux
+  become: yes
+
+- name: copy tmux config
+  template:
+    src: tmux.conf
+    dest: ~/.tmux.conf
+
+- name: copy zsh theme (root)
+  template:
+    src: mine.zsh-theme
+    dest: "/root/.oh-my-zsh/custom/themes/mine.zsh-theme"
+  become: yes
+
+- name: install additional zsh plugins
+  git:
+    repo: "{{ item.url }}"
+    dest: "~/.oh-my-zsh/custom/plugins/{{ item.name }}"
+  with_items:
+    - { "name": "zsh-autosuggestions", "url": "https://github.com/zsh-users/zsh-autosuggestions" }
+    - { "name": "zsh-history-substring-search", "url": "https://github.com/zsh-users/zsh-history-substring-search" }
+    - { "name": "zsh-syntax-highlighting", "url": "https://github.com/zsh-users/zsh-syntax-highlighting" }
+
+- name: install additional zsh plugins (root)
+  shell: "cp -r /home/{{ ansible_user }}/.oh-my-zsh/custom/plugins/* /root/.oh-my-zsh/custom/plugins"
+  become: true
+
+- name: create the whereami file
+  file:
+    path: /var/whereami
+    state: touch
+    mode: '0666'
+  become: yes
+
+- name: change shell to zsh
+  user:
+    name: "{{ ansible_user }}"
+    shell: /usr/bin/zsh
+  become: yes
+
+- name: change shell to zsh (root)
+  user:
+    name: root
+    shell: /usr/bin/zsh
+  become: yes
+

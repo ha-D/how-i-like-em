@@ -24,6 +24,7 @@
     - golang
     - vim
     - zsh
+    - tmux
     - shadowsocks-server
     - shadowsocks-client
 
