@@ -1,10 +1,16 @@
-- name: install terminator
+- name: add alacritty ppa
+  apt_repository:
+    repo: ppa:mmstick76/alacritty
+    state: present
+  become: yes
+
+- name: install alacritty
   apt:
     name: terminator
   become: yes
 
- 
+
 - name: terminator config
   template:
-    src: config
-    dest: ~/.config/terminator/config
+    src: alacritty.yml
+    dest: ~/.alacritty.yml
