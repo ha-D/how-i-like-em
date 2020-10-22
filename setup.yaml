@@ -3,7 +3,7 @@
     ansible_user: ubuntu
     ansible_ssh_pipelining: yes
     ansible_python_interpreter: /usr/bin/python3
-    http_proxy: 
+    http_proxy:
     no_proxy: localhost,127.0.0.1,0.0.0.0,172.16.,172.17.,172.18.,172.19.,10.0.
     git_user: hadi.zolfaghaari
     git_email: hadi.zolfaghaari@gmail.com
@@ -16,13 +16,13 @@
     shadowsocks_password: "{{ lookup('password', './shadowsocks_password chars=ascii_letters') }}"
   roles:
       #   - auth
-    - base 
+    - base
     - docker
-    - git 
+    - git
     - python
     - node
     - golang
-    - neovim
+    - vim
     - zsh
     - shadowsocks-server
     - shadowsocks-client
